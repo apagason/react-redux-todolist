@@ -1,8 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as todoAction from "../redux/actions/actionTodo";
 
-export default function TodoHeader({ edit, onSubmit }) {
-  const [input, setInput] = useState(edit ? edit.value : "");
+export default function TodoHeader() {
+  const [input, setInput] = useState("");
   const inputRef = useRef(null);
+  const { addTodo } = bindActionCreators(todoAction, useDispatch());
 
   useEffect(() => {
     inputRef.current.focus();
@@ -10,8 +14,7 @@ export default function TodoHeader({ edit, onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    onSubmit({
+    addTodo({
       id: Math.floor(Math.random() * 100000),
       text: input,
     });
@@ -27,12 +30,12 @@ export default function TodoHeader({ edit, onSubmit }) {
           ref={inputRef}
           onChange={(e) => setInput(e.target.value)}
           name="text"
-          className="todo-input edit"
+          className="todo-input"
           style={{ width: "600px" }}
           placeholder="What do you have planned?"
         />
         <button id="new-task-submit" onClick={handleSubmit}>
-          {edit ? "Update todo" : "Add todo"}
+          Add Todo
         </button>
       </div>
     </form>
