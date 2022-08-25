@@ -32,6 +32,7 @@ export default function TodoBody() {
           <input
             className="text"
             value={update.id !== todo.id ? todo.text : editInput}
+            onChange={(e) => setEditInput(e.target.value)}
             readOnly={update.id !== todo.id}
           />
         </div>
