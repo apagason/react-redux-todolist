@@ -1,15 +1,15 @@
-import AccordionItem from "react-bootstrap/esm/AccordionItem"
-
-const initialState = []
+import React from "react";
+const initialState = [
+  { username: "test1", email: "test1@email.com", password: 123 },
+];
 
 const registerReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case 'REGISTER_USER':
-            return [action.payload, ...state]
-        default:
-            return state;
-    }
-   
-}
+  switch (action.type) {
+    case "REGISTER_USER":
+      return [action.payload, ...state];
+    default:
+      return state;
+  }
+};
 
-export default registerReducer
+export default registerReducer;
