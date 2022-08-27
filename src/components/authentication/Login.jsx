@@ -1,10 +1,48 @@
+import { useState } from "react";
 import styles from "./Login.css";
-import { Form, Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import * as actionLogin from "../../redux/actions/actionLogin";
+import { bindActionCreators } from "redux";
 
-function Login() {
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const userList = useSelector((state) => state.userList);
+  const { loginUser } = bindActionCreators(actionLogin, useDispatch());
+
+  // Validation
+  const [invalidUser, setInvalidUser] = useState(false);
+
+  const checkIfValid = () => {
+    let isValid = false;
+
+    // Check if user exist
+    userList.forEach((user) => {
+      if (user.email === email && user.password === password) {
+        setInvalidUser(false);
+        isValid = true;
+        console.log("Successful Login");
+      } else {
+        console.log("Failed Login");
+        setInvalidUser(true);
+      }
+    });
+
+    return isValid;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (checkIfValid()) {
+      loginUser({ email, password });
+    }
+    console.log("SUBMIT!!");
+  };
+
   return (
     <div className={styles.container}>
-      <Form className={styles.Container}>
+      <Form className={styles.formContainer} onSubmit={handleSubmit}>
         <h2>LOGIN</h2>
 
         <Form.Group className="mb-4" controlId="formEmail">
@@ -13,26 +51,34 @@ function Login() {
             type="email"
             size="sm"
             placeholder="Enter Your Email"
-            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            isInvalid={invalidUser}
           ></Form.Control>
+          <Form.Control.Feedback type="invalid">
+            Invalid User
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-4" controlId="formPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
-            type="email"
+            type="password"
             size="sm"
             placeholder="Enter Your Password"
-            autoComplete="email"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            isInvalid={invalidUser}
           ></Form.Control>
+          <Form.Control.Feedback type="invalid">
+            Invalid User
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Button variant="primary" type="submit" className={styles.button}>
-          Login
+          Submit
         </Button>
       </Form>
     </div>
   );
 }
-
-export default Login;

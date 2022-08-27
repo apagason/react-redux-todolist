@@ -1,12 +1,14 @@
 import './App.css';
 import Auth from './components/authentication/Auth';
 import TodoList from './components/TodoList';
+import { useSelector } from 'react-redux'
 
 function App() {
+  const activeUser = useSelector((state) => state.activeUser)
   return (
     <div className="App">
-      <Auth />
-      {/* <TodoList/> */}
+      {activeUser.email ? <TodoList/> :  <Auth />}
+     
     </div>
   );
 }
